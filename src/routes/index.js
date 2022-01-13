@@ -7,7 +7,7 @@ const ReactRoutes = () => {
     return (
             <Router>
                 <Routes>
-                    {/* <Route path="/" element={} /> */}
+                    <Route path="/" element={<Home />} />
                     <Route path="/summoner/:summonerNickname" element={<Summoner />}/>
                 </Routes>
             </Router>

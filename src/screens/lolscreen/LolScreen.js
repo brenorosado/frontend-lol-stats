@@ -3,6 +3,7 @@ import Menu from "../../components/menu";
 import { useParams } from "react-router-dom";
 import doGetRequest from "../../helpers/Api";
 import SummonerHeader from "../../components/summonerHeader/SummonerHeader";
+import LeagueRanks from "../../components/leagueranks/LeagueRanks";
 
 const LolScreen = ({ game, setGame, summonerNickname, setSummonerNickname }) => {
     console.log('Lol screen renderizou!');
@@ -22,10 +23,13 @@ const LolScreen = ({ game, setGame, summonerNickname, setSummonerNickname }) => 
         <>
             <Menu game={game} setGame={setGame} summonerNickname={summonerNickname} setSummonerNickname={setSummonerNickname} />
             {
-                leagueData ? <SummonerHeader data={summonerData}/> : null
+                summonerData && leagueData ? (
+                    <>
+                        <SummonerHeader data={summonerData} />
+                        <LeagueRanks data={leagueData} />
+                    </>
+                ) : null
             }
-            <h1>Nick: {summoner}</h1>
-            {/* <h1>Data: {JSON.stringify(summonerData)}</h1> */}
         </>
     );
 };

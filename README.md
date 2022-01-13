@@ -1,11 +1,11 @@
 # lol-stats (backend)
-    This app shows information about players of LoL/TFT
+    This app shows information about players of League of Legends/Teamfight Tactics/Legends of Runeterra/Valorant
 
 # Stack
-- Node/express
+- Node/Express
 - Axios
 - React
-- Bootstrap
+- Bootstrap/React Bootstrap
 
 # Repositories
 - Backend: https://github.com/brenorosado/backend-lol-stats

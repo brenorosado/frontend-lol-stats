@@ -19,6 +19,8 @@ export const SummonerCard = styled.div`
 
 export const SummonerImg = styled.img`
     height: 150px;
+    background-color: gray;
+    border: 3px solid gray;
     
     @media(max-width: 710px){
         height: 100px;

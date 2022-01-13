@@ -1,7 +1,13 @@
 import axios from 'axios';
 
-const api = axios.create({
+const Api = axios.create({
     baseURL: 'http://localhost:3001',
 });
 
-export default api;
+const doGetRequest = (path) => {
+    return Api
+        .get(path)
+        .catch((e) => alert("Houve um erro ao buscar summoner"));
+};
+
+export default doGetRequest;

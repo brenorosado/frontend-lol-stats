@@ -50,7 +50,7 @@ export const Container = styled.div`
                 background-color: #fff;
                 font: 16px comic-sans, sans-serif;
                 font-weight: bold;
-                padding: 10px 8px;
+                padding: 10px 14px;
                 cursor: pointer;
                 background-color: #7180AC;
                 color: white;
@@ -72,7 +72,8 @@ export const Container = styled.div`
                 }
 
                 .dropdown-list__item:hover {
-                    background-color: lightgray;
+                    color: white;
+                    background-color: #8b97bb;
                 }
             }
         }

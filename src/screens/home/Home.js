@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import logo from "../../assets/logo.png";
-import Menu from "../../components/Menu";
+import Menu from "../../components/menu";
 import { Container } from "./styles";
 
-const Home = () => {
-    const [summonerNickname, setSummonerNickname] = useState('');
-    const [game, setGame] = useState('LOL');
+const Home = ({ game, setGame, summonerNickname, setSummonerNickname }) => {
 
     return (
         <>

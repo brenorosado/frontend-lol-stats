@@ -1,21 +1,39 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-    background-color: white;
+    width: 1010px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 5px;
+`;
+
+export const Header = styled.div`
+    width: 1000px;
+    background-color: rgba(255, 255, 255, 0.05);
+    color: white;
+    display: flex;
+    justify-content: center;
+    padding: 10px 0px;
+
+    h2 {
+        font-size: 25px;
+        font-weight: normal;
+    }
 `;
 
 export const MatchContainer = styled.div`
-    width: 900px;
+    background-color: ${props => props.gameResult };
+    width: 1000px;
     display: flex;
-    justify-content: space-evenly;
-    background-color: lightgray;
+    justify-content: space-around;
     padding: 5px 0px;
-    margin-bottom: 30px;
+    border: 1px solid white;
+    margin: 5px 0px;
 `;
 
 export const TeamsContainer = styled.div`
     display: flex;
-    border: 1px solid blue;
 `;
 
 export const Team = styled.div`
@@ -44,7 +62,6 @@ export const Player = styled.div`
 `;
 
 export const GameInfo = styled.div`
-    border: 1px solid black;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -53,10 +70,14 @@ export const GameInfo = styled.div`
 
 export const VictoryResult = styled.p`
     color: green;
+    font-weight: bold;
+    font-size: 20px;
 `;
 
 export const DefeatResult = styled.p`
     color: red;
+    font-weight: bold;
+    font-size: 20px;
 `;
 
 export const SummonerInfo = styled.div`
@@ -88,11 +109,40 @@ export const SpellsImage = styled.div`
     img {
         height: 40px;
         width: 40px;
+        border-radius: 5px;
     }
 `;
 
 export const SummonerPerformance = styled.div`
-    border: 1px solid blue;
     display: flex;
     flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+
+    h1 {
+        font-size: 18px;
+    }
+`;
+
+export const SummonerItems = styled.div`
+    align-self: center;
+    display: grid;
+    grid-template-columns: repeat(4, 40px);
+    grid-template-rows: 40px 40px;
+    grid-gap: 3px;
+    align-items: center;
+    justify-content: center;
+
+    img {
+        height: 40px;
+        width: 40px;
+        border-radius: 5px;
+    }
+
+    div {
+        height: 40px;
+        width: 40px;
+        background-color: gray;
+        border-radius: 5px;
+    }
 `;

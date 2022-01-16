@@ -5,6 +5,7 @@ import doGetRequest from "../../helpers/Api";
 import SummonerHeader from "../../components/summonerHeader/SummonerHeader";
 import LeagueRanks from "../../components/leagueranks/LeagueRanks";
 import LeagueMatches from "../../components/leaguematches/LeagueMatches";
+import { ContentSection } from './styles';
 
 const LolScreen = ({ game, setGame, summonerNickname, setSummonerNickname }) => {
     console.log('Lol screen renderizou!');
@@ -26,8 +27,10 @@ const LolScreen = ({ game, setGame, summonerNickname, setSummonerNickname }) => 
                 summonerInfo ? (
                     <>
                         <SummonerHeader data={summonerInfo} />
-                        <LeagueRanks summonerId={summonerInfo.id} />
-                        <LeagueMatches summonerPuuid={summonerInfo.puuid}/>
+                        <ContentSection>
+                            <LeagueRanks summonerId={summonerInfo.id} />
+                            <LeagueMatches summonerPuuid={summonerInfo.puuid}/>
+                        </ContentSection>
                     </>
                 ) : null
             }

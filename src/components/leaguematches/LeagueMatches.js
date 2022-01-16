@@ -3,7 +3,7 @@ import doGetRequest from "../../helpers/Api";
 import { findQueueType } from "../../helpers/LolQueueTypeHandler";
 import { findSpellImageLink } from "../../helpers/LoLSummonerSpellsHandler";
 import { formatTime, calculateGameEndDate } from "../../helpers/DateHandler";
-import { Container, MatchContainer, TeamsContainer, Team, Player, GameInfo, VictoryResult, DefeatResult, SummonerInfo, UserChampionImage, SpellsImage } from "./styles";
+import { Container, Header, MatchContainer, TeamsContainer, Team, Player, GameInfo, VictoryResult, DefeatResult, SummonerInfo, UserChampionImage, SpellsImage, SummonerPerformance, SummonerItems } from "./styles";
 
 const LeagueMatches = ({ summonerPuuid }) => {
     const [matchesData, setMatchesData] = useState(null);
@@ -19,6 +19,9 @@ const LeagueMatches = ({ summonerPuuid }) => {
 
     return (
         <Container>
+        <Header>
+            <h2>LAST GAMES</h2>
+        </Header>
             {
                 matchesData ? (
                     matchesData.map(matchData => {
@@ -26,7 +29,7 @@ const LeagueMatches = ({ summonerPuuid }) => {
                         const { gameDuration, gameEndTimestamp, queueId } = matchData.info;
 
                         matchData.info.participants.map(participant => {
-                            const { puuid, assists, kills, deaths, totalMinionsKilled, visionScore, item0, item1, item2, item3, item4, item5, item6, summoner1Id, summoner2Id, championName, win } = participant;
+                            const { puuid, assists, kills, deaths, totalMinionsKilled, visionScore, item0, item1, item2, item6, item3, item4, item5, summoner1Id, summoner2Id, championName, win } = participant;
                             if(summonerPuuid === puuid) {
                                 userChampion = championName;
                                 gameResult = win;
@@ -34,7 +37,7 @@ const LeagueMatches = ({ summonerPuuid }) => {
                                 userDeaths = deaths;
                                 userKills = kills;
                                 userMinionsKilled = totalMinionsKilled;
-                                userItems = [item0, item1, item2, item3, item4, item5, item6];
+                                userItems = [item0, item1, item2, item6, item3, item4, item5];
                                 userVisionScore = visionScore;
                                 userSummonerSpell1 = summoner1Id;
                                 userSummonerSpell2 = summoner2Id;
@@ -45,7 +48,7 @@ const LeagueMatches = ({ summonerPuuid }) => {
                         const redTeam = matchData.info.participants.slice(-5);
 
                         return (
-                            <MatchContainer key={gameEndTimestamp}>
+                            <MatchContainer key={gameEndTimestamp} gameResult={gameResult ? '#Acfba6' : '#Fba6a6'}>
                                 <GameInfo>
                                     <p>{findQueueType(queueId)}</p>
                                     <p>{calculateGameEndDate(gameEndTimestamp)}</p>
@@ -58,6 +61,21 @@ const LeagueMatches = ({ summonerPuuid }) => {
                                     <SpellsImage><img src={`http://ddragon.leagueoflegends.com/cdn/12.1.1/img/spell/${findSpellImageLink(userSummonerSpell2)}`} alt={findSpellImageLink(userSummonerSpell2)} /></SpellsImage>
                                     <p>{userChampion}</p>
                                 </SummonerInfo>
+                                <SummonerPerformance>
+                                    <h1>{`${userKills} / ${userDeaths} / ${userAssists}`}</h1>
+                                    <p>KDA: {((userKills + userAssists) / (userDeaths === 0 ? 1 : userDeaths)).toFixed(2)}</p>
+                                    <p>CS: {userMinionsKilled}</p>
+                                    <p>Vision score: {userVisionScore}</p>
+                                </SummonerPerformance>
+                                <SummonerItems>
+                                    {
+                                        userItems.map(item => {
+                                            if(item !== 0) return <img src={`http://ddragon.leagueoflegends.com/cdn/12.1.1/img/item/${item}.png`} alt={item}/>
+
+                                            return <div></div>
+                                        })
+                                    }
+                                </SummonerItems>
                                 <TeamsContainer>
                                     <Team>
                                         {

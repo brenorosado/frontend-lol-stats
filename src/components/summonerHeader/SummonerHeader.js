@@ -3,7 +3,7 @@ import { Container, SummonerCard, SummonerImg, SummonerInfo } from "./styles";
 
 const SummonerHeader = ({ data }) => {
     const { name, profileIconId, summonerLevel } = data;
-    console.log(data);
+    
     return (
         <Container>
             <SummonerCard>

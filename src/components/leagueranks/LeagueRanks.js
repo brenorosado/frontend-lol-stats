@@ -1,13 +1,24 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import doGetRequest from '../../helpers/Api';
 import { Container, RankIcon, RankContainer, RankInfoUnranked, RankInfo, WinsSpan, LossesSpan } from "./styles";
 
-const LeagueRanks = ({ data }) => {
+const LeagueRanks = ({ summonerId }) => {
+    const [leagueRankData, setLeagueRankData] = useState(null);
     let rankedSoloData = null, rankedFlexData = null;
+    
+    useEffect(async () => {
+        setLeagueRankData(null);
 
-    data.map(item => {
-        if (item.queueType === 'RANKED_SOLO_5x5') rankedSoloData = item;
-        if (item.queueType === 'RANKED_FLEX_SR') rankedFlexData = item;
-    });
+        await doGetRequest(`/lol/rank/${summonerId}`)
+            .then(({data}) => setLeagueRankData(data));
+    }, [summonerId]);
+
+    (leagueRankData) ? (
+        leagueRankData.map(item => {
+            if (item.queueType === 'RANKED_SOLO_5x5') rankedSoloData = item;
+            if (item.queueType === 'RANKED_FLEX_SR') rankedFlexData = item;
+        })
+    ) : (rankedSoloData = rankedFlexData = null);
 
     return (
         <Container>

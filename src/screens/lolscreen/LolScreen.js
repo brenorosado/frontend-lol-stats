@@ -4,29 +4,30 @@ import { useParams } from "react-router-dom";
 import doGetRequest from "../../helpers/Api";
 import SummonerHeader from "../../components/summonerHeader/SummonerHeader";
 import LeagueRanks from "../../components/leagueranks/LeagueRanks";
+import LeagueMatches from "../../components/leaguematches/LeagueMatches";
 
 const LolScreen = ({ game, setGame, summonerNickname, setSummonerNickname }) => {
     console.log('Lol screen renderizou!');
     const { summoner } = useParams();
 
-    const [summonerData, setSummonerData] = useState(null);
-    const [leagueData, setLeagueData] = useState(null);
+    const [summonerInfo, setSummonerInfo] = useState(null);
 
     useEffect(async () => {
-        const lolData = await doGetRequest(`/lol/${summoner}`);
+        setSummonerInfo(null);
 
-        setSummonerData(lolData.data.summonerData);
-        setLeagueData(lolData.data.lolData);
+        await doGetRequest(`/summoner/${summoner}`)
+            .then(({data}) => setSummonerInfo(data));
     }, [summoner]);
 
     return (
         <>
             <Menu game={game} setGame={setGame} summonerNickname={summonerNickname} setSummonerNickname={setSummonerNickname} />
             {
-                summonerData && leagueData ? (
+                summonerInfo ? (
                     <>
-                        <SummonerHeader data={summonerData} />
-                        <LeagueRanks data={leagueData} />
+                        <SummonerHeader data={summonerInfo} />
+                        <LeagueRanks summonerId={summonerInfo.id} />
+                        <LeagueMatches summonerPuuid={summonerInfo.puuid}/>
                     </>
                 ) : null
             }

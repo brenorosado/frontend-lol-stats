@@ -1,12 +1,11 @@
 import styled from "styled-components";
 
 export const Container = styled.div`
-    height: 320px;
-    width: 360px;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
     align-items: center;
+    margin-top: 5px;
 `;
 
 export const RankContainer = styled.div`
@@ -14,9 +13,10 @@ export const RankContainer = styled.div`
     display: flex;
     justify-content: space-evenly;
     align-items: center;
-    background-color: rgba(255, 255, 255, 0.05);
+    background-color: #1a232b;
     padding: 15px 0px;
-    border: 1px solid lightgray;
+    margin-bottom: 5px;
+    border-radius: 5px;
 `;
 
 export const RankIcon = styled.img`

@@ -7,23 +7,29 @@ export default createGlobalStyle`
     outline: 0;
     box-sizing: border-box;
    }
+
     body{
-    -webkit-font-smoothing: antialiased;  
+        -webkit-font-smoothing: antialiased;  
     }
+
     body, input, button{
         font: 14px comic-sans, sans-serif;
     }
-    a{
-    text-decoration: none;
+
+    a {
+        text-decoration: none;
     }
+
     ul{
-    list-style: none;
+        list-style: none;
     }
+
     button{
-    cursor: pointer;
-    border: none;
+        cursor: pointer;
+        border: none;
     }
+
     body{
-        background-color: #1e1e1e;
+        background-color: black;
     }
 `;

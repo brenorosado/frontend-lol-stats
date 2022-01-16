@@ -3,7 +3,7 @@ import doGetRequest from "../../helpers/Api";
 import { findQueueType } from "../../helpers/LolQueueTypeHandler";
 import { findSpellImageLink } from "../../helpers/LoLSummonerSpellsHandler";
 import { formatTime, calculateGameEndDate } from "../../helpers/DateHandler";
-import { Container, Header, MatchContainer, TeamsContainer, Team, Player, GameInfo, VictoryResult, DefeatResult, SummonerInfo, UserChampionImage, SpellsImage, SummonerPerformance, SummonerItems } from "./styles";
+import { Container, Header, MatchContainer, TeamsContainer, Team, Player, GameInfo, VictoryResult, DefeatResult, SummonerInfo, UserChampionImage, SpellsImage, SummonerPerformance, SummonerItems, GameResult } from "./styles";
 
 const LeagueMatches = ({ summonerPuuid }) => {
     const [matchesData, setMatchesData] = useState(null);
@@ -52,7 +52,7 @@ const LeagueMatches = ({ summonerPuuid }) => {
                                 <GameInfo>
                                     <p>{findQueueType(queueId)}</p>
                                     <p>{calculateGameEndDate(gameEndTimestamp)}</p>
-                                    {gameResult ? <VictoryResult>Victory</VictoryResult> : <DefeatResult>Defeat</DefeatResult>}
+                                    <GameResult gameResult={gameResult ? 'green' : 'red'}>{gameResult ? 'Victory' : 'Defeat'}</GameResult>
                                     <p>{formatTime(gameDuration)}</p>
                                 </GameInfo>
                                 <SummonerInfo>

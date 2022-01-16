@@ -14,8 +14,9 @@ const formatTime = (TimeInSeconds) => {
 
 const calculateGameEndDate = (DateInMiliseconds) => {
     const data = new Date(DateInMiliseconds);
+    const [weekDay, month, monthDay, year] = data.toString().split(' ');
 
-    return data.toString().split(' G')[0];
+    return `${monthDay}/${month}/${year}`;
 };
 
 export { formatTime, calculateGameEndDate };

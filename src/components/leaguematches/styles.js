@@ -1,35 +1,37 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-    width: 1010px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding-top: 5px;
+    margin: 5px 0px 0px 5px;
 `;
 
 export const Header = styled.div`
-    width: 1000px;
-    background-color: rgba(255, 255, 255, 0.05);
+    width: 800px;
+    background-color: #1a232b;
     color: white;
     display: flex;
     justify-content: center;
     padding: 10px 0px;
+    margin-bottom: 5px;
+    border-radius: 5px;
 
     h2 {
-        font-size: 25px;
+        font-size: 15px;
         font-weight: normal;
     }
 `;
 
 export const MatchContainer = styled.div`
     background-color: ${props => props.gameResult };
-    width: 1000px;
+    width: 800px;
     display: flex;
     justify-content: space-around;
     padding: 5px 0px;
-    border: 1px solid white;
-    margin: 5px 0px;
+    border-radius: 5px;
+    border: 1px solid #1e1e1e;
+    margin-bottom: 2px;
 `;
 
 export const TeamsContainer = styled.div`
@@ -45,18 +47,19 @@ export const Team = styled.div`
 export const Player = styled.div`
     display: grid;
     align-items: center;
-    grid-template-columns: 28px 120px;
-    grid-template-rows: 28px;
-    grid-column-gap: 3px;
+    grid-template-columns: 20px 100px;
+    grid-column-gap: 2px;
     margin: 1px 0px;
 
     p {
         overflow: hidden;
         cursor: pointer;
+        height: 18px;
+        align-self: end; 
     }
 
     img {
-        height: 28px;
+        height: 20px;
         border-radius: 4px;
     }
 `;
@@ -66,25 +69,22 @@ export const GameInfo = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: space-evenly;
+
+    p { 
+        font-size: 12px;
+        font-weight: bold;
+    }
 `;
 
-export const VictoryResult = styled.p`
-    color: green;
-    font-weight: bold;
-    font-size: 20px;
-`;
-
-export const DefeatResult = styled.p`
-    color: red;
-    font-weight: bold;
-    font-size: 20px;
+export const GameResult = styled.p`
+    color: ${props => props.gameResult};
 `;
 
 export const SummonerInfo = styled.div`
     align-self: center;
     display: grid;
-    grid-template-columns: 40px 40px 40px;
-    grid-template-rows: 40px 40px 20px; 
+    grid-template-columns: 30px 30px 30px;
+    grid-template-rows: 30px 30px 20px; 
     grid-gap: 3px;
     align-items: center;
     justify-content: center;
@@ -99,17 +99,19 @@ export const UserChampionImage = styled.div`
     grid-area: 1 / 1 / 3 / 3;
 
     img {
-        height: 80px;
-        width: 80px;
+        height: 60px;
+        width: 60px;
         border-radius: 50%;
+        border: 1px solid #1e1e1e;
     }
 `;
 
 export const SpellsImage = styled.div`
     img {
-        height: 40px;
-        width: 40px;
+        height: 30px;
+        width: 30px;
         border-radius: 5px;
+        border: 1px solid #1e1e1e;
     }
 `;
 
@@ -127,22 +129,24 @@ export const SummonerPerformance = styled.div`
 export const SummonerItems = styled.div`
     align-self: center;
     display: grid;
-    grid-template-columns: repeat(4, 40px);
-    grid-template-rows: 40px 40px;
-    grid-gap: 3px;
+    grid-template-columns: repeat(4, 30px);
+    grid-template-rows: 30px 30px;
+    grid-gap: 2px;
     align-items: center;
     justify-content: center;
 
     img {
-        height: 40px;
-        width: 40px;
+        height: 30px;
+        width: 30px;
         border-radius: 5px;
+        border: 1px solid #1e1e1e;
     }
 
     div {
-        height: 40px;
-        width: 40px;
+        height: 30px;
+        width: 30px;
         background-color: gray;
         border-radius: 5px;
+        border: 1px solid #1e1e1e;
     }
 `;

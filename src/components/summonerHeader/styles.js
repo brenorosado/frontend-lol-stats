@@ -10,10 +10,10 @@ export const Container = styled.div`
 `;
 
 export const SummonerCard = styled.div`
-    width: 60%;
-    background-color: rgba(255, 255, 255, 0.05);
+    width: 60.65%;
+    background-color: #1a232b;
+    border-radius: 5px;
     padding: 20px;
-    margin: 20px;
     display: flex;
 `;
 
@@ -21,6 +21,7 @@ export const SummonerImg = styled.img`
     height: 150px;
     background-color: gray;
     border: 3px solid gray;
+    border-radius: 5px;
     
     @media(max-width: 710px){
         height: 100px;

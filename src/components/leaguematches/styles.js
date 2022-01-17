@@ -20,12 +20,14 @@ export const MatchContainer = styled.div`
 
 export const TeamsContainer = styled.div`
     display: flex;
+    justify-content: space-between;
 `;
 
 export const Team = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    margin-right: 4px;
 `;
 
 export const Player = styled.div`
@@ -173,4 +175,14 @@ export const WinRate = styled.div`
         text-align: center;
         font-size: 20px;
     }
+`;
+
+export const PerformanceStats = styled.div`
+    p {
+        color: white;
+    }
+`;
+
+export const SelectedChampions = styled.div`
+
 `;

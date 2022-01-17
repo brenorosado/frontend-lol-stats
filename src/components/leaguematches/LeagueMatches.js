@@ -5,7 +5,8 @@ import { findSpellImageLink } from "../../helpers/LoLSummonerSpellsHandler";
 import { formatTime, calculateGameEndDate } from "../../helpers/DateHandler";
 import {
     Container, MatchContainer, TeamsContainer, Team, Player, GameInfo, SummonerInfo, UserChampionImage, SpellsImage,
-    SummonerPerformance, SummonerItems, GameResult, GamesStatsContainer, WinRate, GameStats } from "./styles";
+    SummonerPerformance, SummonerItems, GameResult, GamesStatsContainer, WinRate, GameStats, SelectedChampions, PerformanceStats
+} from "./styles";
 
 const LeagueMatches = ({ summonerPuuid }) => {
     const [matchesData, setMatchesData] = useState(null);
@@ -21,11 +22,13 @@ const LeagueMatches = ({ summonerPuuid }) => {
     let arrayGamesResults = [];
     let arrayPlayers = [];
     let arrayUserChampions = [];
-    let arrayUserKDAs = [];
+    let arrayUserKills = [], arrayUserDeaths = [], arrayUserAssists = [], userAverageKills, userAverageDeaths, userAverageAssists, userAverageKDA;
     let arrayUserMinionsKilled = [];
+    let userAverageMinionsKilled;
     let arrayUserVisionScores = [];
+    let userAverageVisionScore;
     let arrayUserTeamPosition = [];
-    
+
     if (matchesData) {
         matchesData.map(matchData => {
             let gameParticipants = [];
@@ -38,11 +41,9 @@ const LeagueMatches = ({ summonerPuuid }) => {
                 if (summonerPuuid === puuid) {
                     arrayUserChampions = [...arrayUserChampions, championName];
                     arrayGamesResults = [...arrayGamesResults, win ? 'victory' : 'defeat'];
-                    arrayUserKDAs = [...arrayUserKDAs, {
-                        kills,
-                        deaths,
-                        assists
-                    }];
+                    arrayUserKills = [...arrayUserKills, kills];
+                    arrayUserDeaths = [...arrayUserDeaths, deaths];
+                    arrayUserAssists = [...arrayUserAssists, assists];
                     arrayUserMinionsKilled = [...arrayUserMinionsKilled, totalMinionsKilled];
                     arrayUserVisionScores = [...arrayUserVisionScores, visionScore];
                     arrayUserTeamPosition = [...arrayUserTeamPosition, teamPosition];
@@ -78,6 +79,15 @@ const LeagueMatches = ({ summonerPuuid }) => {
                 gameParticipants
             }];
         });
+
+        console.log(arrayUserKills, arrayUserDeaths, arrayUserAssists, arrayUserMinionsKilled)
+
+        userAverageMinionsKilled = arrayUserMinionsKilled.reduce((userAverageMinionsKilled, i) => userAverageMinionsKilled + i) / arrayUserMinionsKilled.length;
+        userAverageVisionScore = arrayUserVisionScores.reduce((userAverageVisionScore, i) => userAverageVisionScore + i) / arrayUserVisionScores.length;
+        userAverageKills = arrayUserKills.reduce((userAverageKills, i) => userAverageKills + i) / arrayUserKills.length;
+        userAverageDeaths = arrayUserDeaths.reduce((userAverageDeaths, i) => userAverageDeaths + i) / arrayUserDeaths.length;
+        userAverageAssists = arrayUserAssists.reduce((userAverageAssists, i) => userAverageAssists + i) / arrayUserAssists.length;
+        userAverageKDA = (arrayUserKills + arrayUserAssists) / (userAverageDeaths ? userAverageDeaths : 1);
     };
 
     return (
@@ -87,11 +97,22 @@ const LeagueMatches = ({ summonerPuuid }) => {
                 <GameStats>
                     {
                         matchesData ? (
-                            <WinRate>
-                                <p>
-                                    Winrate {(((arrayGamesResults.filter((v) => (v === 'victory')).length) / arrayGamesResults.length) * 100)}%
-                                </p>
-                            </WinRate>
+                            <>
+                                <WinRate>
+                                    <p>
+                                        Winrate {(((arrayGamesResults.filter((v) => (v === 'victory')).length) / arrayGamesResults.length) * 100)}%
+                                    </p>
+                                </WinRate>
+                                <PerformanceStats>
+                                    <p>Average CS: {userAverageMinionsKilled}</p>
+                                    <p>Average Vision Score: {userAverageVisionScore}</p>
+                                    <p>Average KDA: {arrayUserKills}</p>
+                                </PerformanceStats>
+                                <SelectedChampions>
+                                    {/* {arrayUserChampions} */}
+                                </SelectedChampions>
+                            </>
+
                         ) : null
                     }
                 </GameStats>
@@ -120,7 +141,6 @@ const LeagueMatches = ({ summonerPuuid }) => {
 
                         let blueTeam = matchData.gameParticipants.slice(0, 5);
                         let redTeam = matchData.gameParticipants.slice(-5);
-                        console.log(userSummonerSpells);
 
                         return (
                             <MatchContainer key={gameEndTimestamp} gameResult={gameResult ? '#Acfba6' : '#Fba6a6'}>
@@ -166,7 +186,7 @@ const LeagueMatches = ({ summonerPuuid }) => {
                                         }
                                     </Team>
                                     <Team>
-                                    {
+                                        {
                                             redTeam.map(participant => {
                                                 const { championName, summonerName } = participant;
 

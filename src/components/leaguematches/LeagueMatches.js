@@ -14,6 +14,7 @@ const LeagueMatches = ({ summonerPuuid }) => {
     useEffect(async () => {
         await doGetRequest(`/lol/matches/${summonerPuuid}`)
             .then(({ data }) => setMatchesData(data));
+
     }, [summonerPuuid]);
 
     let arrayGamesData = [];
@@ -24,12 +25,11 @@ const LeagueMatches = ({ summonerPuuid }) => {
     let arrayUserMinionsKilled = [];
     let arrayUserVisionScores = [];
     let arrayUserTeamPosition = [];
-
+    
     if (matchesData) {
         matchesData.map(matchData => {
+            let gameParticipants = [];
             const { gameDuration, gameEndTimestamp, queueId } = matchData.info;
-            console.log(matchesData);
-            let gameParticipant = [];
 
             matchData.info.participants.map(participant => {
                 const { puuid, assists, kills, deaths, totalMinionsKilled, visionScore, goldEarned, item0, item1,
@@ -48,7 +48,7 @@ const LeagueMatches = ({ summonerPuuid }) => {
                     arrayUserTeamPosition = [...arrayUserTeamPosition, teamPosition];
                 };
 
-                gameParticipant = {
+                let gameParticipant = {
                     puuid,
                     summonerName,
                     championName,
@@ -65,19 +65,20 @@ const LeagueMatches = ({ summonerPuuid }) => {
                     spells: [summoner1Id, summoner2Id]
                 };
 
-                arrayPlayers = [...arrayPlayers, gameParticipant];
+                gameParticipants = [...gameParticipants, gameParticipant];
             });
+
+            arrayPlayers = [...arrayPlayers, gameParticipants];
+            console.log(arrayPlayers);
 
             arrayGamesData = [...arrayGamesData, {
                 gameDuration,
                 gameEndTimestamp,
                 queueId,
-                arrayPlayers
+                gameParticipants
             }];
         });
     };
-
-    console.log(arrayGamesResults);
 
     return (
         <Container>
@@ -88,7 +89,7 @@ const LeagueMatches = ({ summonerPuuid }) => {
                         matchesData ? (
                             <WinRate>
                                 <p>
-                                    Winrate: {(((arrayGamesResults.filter((v) => (v === 'victory')).length) / arrayGamesResults.length) * 100)}%
+                                    Winrate {(((arrayGamesResults.filter((v) => (v === 'victory')).length) / arrayGamesResults.length) * 100)}%
                                 </p>
                             </WinRate>
                         ) : null
@@ -101,7 +102,7 @@ const LeagueMatches = ({ summonerPuuid }) => {
 
                         const { gameDuration, gameEndTimestamp, queueId } = matchData;
 
-                        matchData.arrayPlayers.map(participant => {
+                        matchData.gameParticipants.map(participant => {
                             if (participant.puuid === summonerPuuid) {
                                 userChampion = participant.championName;
                                 userChampionLevel = participant.champLevel;
@@ -115,10 +116,11 @@ const LeagueMatches = ({ summonerPuuid }) => {
                                 userChampionName = participant.championName;
                                 userSummonerSpells = participant.spells;
                             };
-                        })
+                        });
 
-                        const blueTeam = matchData.arrayPlayers.slice(0, 5);
-                        const redTeam = matchData.arrayPlayers.slice(-5);
+                        let blueTeam = matchData.gameParticipants.slice(0, 5);
+                        let redTeam = matchData.gameParticipants.slice(-5);
+                        console.log(userSummonerSpells);
 
                         return (
                             <MatchContainer key={gameEndTimestamp} gameResult={gameResult ? '#Acfba6' : '#Fba6a6'}>
@@ -164,13 +166,14 @@ const LeagueMatches = ({ summonerPuuid }) => {
                                         }
                                     </Team>
                                     <Team>
-                                        {
+                                    {
                                             redTeam.map(participant => {
                                                 const { championName, summonerName } = participant;
+
                                                 return (
                                                     <Player key={summonerName}>
-                                                        <img src={`https://ddragon.leagueoflegends.com/cdn/12.1.1/img/champion/${championName}.png`} />
-                                                        <p>{summonerName}</p>
+                                                        <img src={`https://ddragon.leagueoflegends.com/cdn/12.1.1/img/champion/${championName === 'FiddleSticks' ? 'Fiddlesticks' : championName}.png`} alt={championName} />
+                                                        <p onClick={(e) => console.log('Faça ir para a pagina desse summoner!')}>{summonerName}</p>
                                                     </Player>
                                                 );
                                             })

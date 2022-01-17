@@ -7,22 +7,6 @@ export const Container = styled.div`
     margin: 5px 0px 0px 5px;
 `;
 
-export const Header = styled.div`
-    width: 800px;
-    background-color: #1a232b;
-    color: white;
-    display: flex;
-    justify-content: center;
-    padding: 10px 0px;
-    margin-bottom: 5px;
-    border-radius: 5px;
-
-    h2 {
-        font-size: 15px;
-        font-weight: normal;
-    }
-`;
-
 export const MatchContainer = styled.div`
     background-color: ${props => props.gameResult };
     width: 800px;
@@ -55,7 +39,7 @@ export const Player = styled.div`
         overflow: hidden;
         cursor: pointer;
         height: 18px;
-        align-self: end; 
+        align-self: end;
     }
 
     img {
@@ -148,5 +132,45 @@ export const SummonerItems = styled.div`
         background-color: gray;
         border-radius: 5px;
         border: 1px solid #1e1e1e;
+    }
+`;
+
+export const GamesStatsContainer = styled.div`
+    width: 800px;
+    background-color: #1a232b;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 5px 0px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+
+    h1 {
+        align-self: center;
+        font-size: 25px;
+        font-weight: normal;
+        margin-bottom: 10px;
+    }
+`;
+
+export const GameStats = styled.div`
+    display: flex;
+    justify-content: space-evenly;
+`;
+
+export const WinRate = styled.div`
+    height: 100px;
+    width: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 3px solid #7180AC;
+    background-color: #2b4570;
+    border-radius: 50%;
+
+    p {
+        text-align: center;
+        font-size: 20px;
     }
 `;

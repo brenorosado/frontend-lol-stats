@@ -3,49 +3,122 @@ import doGetRequest from "../../helpers/Api";
 import { findQueueType } from "../../helpers/LolQueueTypeHandler";
 import { findSpellImageLink } from "../../helpers/LoLSummonerSpellsHandler";
 import { formatTime, calculateGameEndDate } from "../../helpers/DateHandler";
-import { Container, Header, MatchContainer, TeamsContainer, Team, Player, GameInfo, VictoryResult, DefeatResult, SummonerInfo, UserChampionImage, SpellsImage, SummonerPerformance, SummonerItems, GameResult } from "./styles";
+import {
+    Container, MatchContainer, TeamsContainer, Team, Player, GameInfo, SummonerInfo, UserChampionImage, SpellsImage,
+    SummonerPerformance, SummonerItems, GameResult, GamesStatsContainer, WinRate, GameStats } from "./styles";
 
 const LeagueMatches = ({ summonerPuuid }) => {
     const [matchesData, setMatchesData] = useState(null);
-    let userChampion = '', gameResult = false, userAssists, userDeaths, userKills, userMinionsKilled, userItems, userVisionScore, userChampionName, userSummonerSpell1, userSummonerSpell2;
-
+    let userChampion = '', userChampionLevel, gameResult = false, userAssists, userDeaths, userKills, userMinionsKilled, userItems, userVisionScore, userChampionName, userSummonerSpells;
+    let cabeca;
     useEffect(async () => {
         await doGetRequest(`/lol/matches/${summonerPuuid}`)
             .then(({ data }) => setMatchesData(data));
     }, [summonerPuuid]);
 
-    matchesData ? (
-        console.log(matchesData)) : console.log(`nao existe matchesData`);
+    let arrayGamesData = [];
+    let arrayGamesResults = [];
+    let arrayPlayers = [];
+    let arrayUserChampions = [];
+    let arrayUserKDAs = [];
+    let arrayUserMinionsKilled = [];
+    let arrayUserVisionScores = [];
+    let arrayUserTeamPosition = [];
+
+    if (matchesData) {
+        matchesData.map(matchData => {
+            const { gameDuration, gameEndTimestamp, queueId } = matchData.info;
+            console.log(matchesData);
+            let gameParticipant = [];
+
+            matchData.info.participants.map(participant => {
+                const { puuid, assists, kills, deaths, totalMinionsKilled, visionScore, goldEarned, item0, item1,
+                    item2, item6, item3, item4, item5, summoner1Id, summoner2Id, championName, champLevel, win, summonerName, totalDamageDealtToChampions, teamPosition } = participant;
+
+                if (summonerPuuid === puuid) {
+                    arrayUserChampions = [...arrayUserChampions, championName];
+                    arrayGamesResults = [...arrayGamesResults, win ? 'victory' : 'defeat'];
+                    arrayUserKDAs = [...arrayUserKDAs, {
+                        kills,
+                        deaths,
+                        assists
+                    }];
+                    arrayUserMinionsKilled = [...arrayUserMinionsKilled, totalMinionsKilled];
+                    arrayUserVisionScores = [...arrayUserVisionScores, visionScore];
+                    arrayUserTeamPosition = [...arrayUserTeamPosition, teamPosition];
+                };
+
+                gameParticipant = {
+                    puuid,
+                    summonerName,
+                    championName,
+                    champLevel,
+                    kills,
+                    deaths,
+                    assists,
+                    totalMinionsKilled,
+                    visionScore,
+                    totalDamageDealtToChampions,
+                    goldEarned,
+                    win,
+                    items: [item0, item1, item2, item6, item3, item4, item5],
+                    spells: [summoner1Id, summoner2Id]
+                };
+
+                arrayPlayers = [...arrayPlayers, gameParticipant];
+            });
+
+            arrayGamesData = [...arrayGamesData, {
+                gameDuration,
+                gameEndTimestamp,
+                queueId,
+                arrayPlayers
+            }];
+        });
+    };
+
+    console.log(arrayGamesResults);
 
     return (
         <Container>
-        <Header>
-            <h2>LAST GAMES</h2>
-        </Header>
+            <GamesStatsContainer>
+                <h1>LAST 10 GAMES STATS</h1>
+                <GameStats>
+                    {
+                        matchesData ? (
+                            <WinRate>
+                                <p>
+                                    Winrate: {(((arrayGamesResults.filter((v) => (v === 'victory')).length) / arrayGamesResults.length) * 100)}%
+                                </p>
+                            </WinRate>
+                        ) : null
+                    }
+                </GameStats>
+            </GamesStatsContainer>
             {
                 matchesData ? (
-                    matchesData.map(matchData => {
+                    arrayGamesData.map(matchData => {
 
-                        const { gameDuration, gameEndTimestamp, queueId } = matchData.info;
+                        const { gameDuration, gameEndTimestamp, queueId } = matchData;
 
-                        matchData.info.participants.map(participant => {
-                            const { puuid, assists, kills, deaths, totalMinionsKilled, visionScore, item0, item1, item2, item6, item3, item4, item5, summoner1Id, summoner2Id, championName, win } = participant;
-                            if(summonerPuuid === puuid) {
-                                userChampion = championName;
-                                gameResult = win;
-                                userAssists = assists;
-                                userDeaths = deaths;
-                                userKills = kills;
-                                userMinionsKilled = totalMinionsKilled;
-                                userItems = [item0, item1, item2, item6, item3, item4, item5];
-                                userVisionScore = visionScore;
-                                userSummonerSpell1 = summoner1Id;
-                                userSummonerSpell2 = summoner2Id;
+                        matchData.arrayPlayers.map(participant => {
+                            if (participant.puuid === summonerPuuid) {
+                                userChampion = participant.championName;
+                                userChampionLevel = participant.champLevel;
+                                gameResult = participant.win;
+                                userAssists = participant.assists;
+                                userDeaths = participant.deaths;
+                                userKills = participant.kills;
+                                userMinionsKilled = participant.totalMinionsKilled;
+                                userItems = participant.items;
+                                userVisionScore = participant.visionScore;
+                                userChampionName = participant.championName;
+                                userSummonerSpells = participant.spells;
                             };
-                        });
+                        })
 
-                        const blueTeam = matchData.info.participants.slice(0, 5);
-                        const redTeam = matchData.info.participants.slice(-5);
+                        const blueTeam = matchData.arrayPlayers.slice(0, 5);
+                        const redTeam = matchData.arrayPlayers.slice(-5);
 
                         return (
                             <MatchContainer key={gameEndTimestamp} gameResult={gameResult ? '#Acfba6' : '#Fba6a6'}>
@@ -56,9 +129,9 @@ const LeagueMatches = ({ summonerPuuid }) => {
                                     <p>{formatTime(gameDuration)}</p>
                                 </GameInfo>
                                 <SummonerInfo>
-                                    <UserChampionImage><img src={`https://ddragon.leagueoflegends.com/cdn/12.1.1/img/champion/${userChampion === 'FiddleSticks' ? 'Fiddlesticks' : userChampion}.png`} alt={userChampion}/></UserChampionImage>
-                                    <SpellsImage><img src={`http://ddragon.leagueoflegends.com/cdn/12.1.1/img/spell/${findSpellImageLink(userSummonerSpell1)}`} alt={findSpellImageLink(userSummonerSpell1)} /></SpellsImage>
-                                    <SpellsImage><img src={`http://ddragon.leagueoflegends.com/cdn/12.1.1/img/spell/${findSpellImageLink(userSummonerSpell2)}`} alt={findSpellImageLink(userSummonerSpell2)} /></SpellsImage>
+                                    <UserChampionImage><img src={`https://ddragon.leagueoflegends.com/cdn/12.1.1/img/champion/${userChampion === 'FiddleSticks' ? 'Fiddlesticks' : userChampion}.png`} alt={userChampion} /></UserChampionImage>
+                                    <SpellsImage><img src={`http://ddragon.leagueoflegends.com/cdn/12.1.1/img/spell/${findSpellImageLink(userSummonerSpells[0])}`} alt={findSpellImageLink(userSummonerSpells[0])} /></SpellsImage>
+                                    <SpellsImage><img src={`http://ddragon.leagueoflegends.com/cdn/12.1.1/img/spell/${findSpellImageLink(userSummonerSpells[1])}`} alt={findSpellImageLink(userSummonerSpells[1])} /></SpellsImage>
                                     <p>{userChampion}</p>
                                 </SummonerInfo>
                                 <SummonerPerformance>
@@ -70,8 +143,7 @@ const LeagueMatches = ({ summonerPuuid }) => {
                                 <SummonerItems>
                                     {
                                         userItems.map(item => {
-                                            if(item !== 0) return <img src={`http://ddragon.leagueoflegends.com/cdn/12.1.1/img/item/${item}.png`} alt={item}/>
-
+                                            if (item !== 0) return <img src={`http://ddragon.leagueoflegends.com/cdn/12.1.1/img/item/${item}.png`} alt={item} />
                                             return <div></div>
                                         })
                                     }
@@ -84,7 +156,7 @@ const LeagueMatches = ({ summonerPuuid }) => {
 
                                                 return (
                                                     <Player key={summonerName}>
-                                                        <img src={`https://ddragon.leagueoflegends.com/cdn/12.1.1/img/champion/${championName === 'FiddleSticks' ? 'Fiddlesticks' : championName}.png`} alt={championName}/>
+                                                        <img src={`https://ddragon.leagueoflegends.com/cdn/12.1.1/img/champion/${championName === 'FiddleSticks' ? 'Fiddlesticks' : championName}.png`} alt={championName} />
                                                         <p onClick={(e) => console.log('Faça ir para a pagina desse summoner!')}>{summonerName}</p>
                                                     </Player>
                                                 );

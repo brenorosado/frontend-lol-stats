@@ -151,7 +151,6 @@ export const GamesStatsContainer = styled.div`
     h1 {
         align-self: center;
         font-size: 25px;
-        font-weight: normal;
         margin-bottom: 5px;
     }
 `;
@@ -178,7 +177,6 @@ export const WinRate = styled.div`
 `;
 
 export const PerformanceStats = styled.div`
-    ${'' /* border: 1px solid red; */}
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -191,4 +189,28 @@ export const PerformanceStats = styled.div`
 
 export const SelectedChampions = styled.div`
     border: 1px solid red;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    p {
+        font-size: 7px;
+    }
+`;
+
+export const SelectedRoles = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    
+    img {
+        height: 40px;
+        margin-right: 5px;
+    }
+`;
+
+export const RoleInfo = styled.div`
+    display: flex;
+    align-items: center;
 `;

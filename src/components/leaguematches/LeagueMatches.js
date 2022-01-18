@@ -5,7 +5,7 @@ import { findSpellImageLink } from "../../helpers/LoLSummonerSpellsHandler";
 import { formatTime, calculateGameEndDate } from "../../helpers/DateHandler";
 import {
     Container, MatchContainer, TeamsContainer, Team, Player, GameInfo, SummonerInfo, UserChampionImage, SpellsImage,
-    SummonerPerformance, SummonerItems, GameResult, GamesStatsContainer, WinRate, GameStats, SelectedChampions, PerformanceStats
+    SummonerPerformance, SummonerItems, GameResult, GamesStatsContainer, WinRate, GameStats, SelectedChampions, PerformanceStats, SelectedRoles, RoleInfo
 } from "./styles";
 
 const LeagueMatches = ({ summonerPuuid }) => {
@@ -84,9 +84,37 @@ const LeagueMatches = ({ summonerPuuid }) => {
         userAverageKills = (arrayUserKills.reduce((userAverageKills, i) => userAverageKills + i) / arrayUserKills.length);
         userAverageDeaths = (arrayUserDeaths.reduce((userAverageDeaths, i) => userAverageDeaths + i) / arrayUserDeaths.length);
         userAverageAssists = (arrayUserAssists.reduce((userAverageAssists, i) => userAverageAssists + i) / arrayUserAssists.length);
-        console.log(userAverageKills, userAverageDeaths, userAverageAssists);
         userAverageKDA = ((userAverageKills + userAverageAssists) / (userAverageDeaths ? userAverageDeaths : 1)).toFixed(2);
     };
+
+    const mostRolesPlayed = (arrayOfRoles) => {
+        let support = {
+            role: 'Support',
+            porcentage: (((arrayOfRoles.filter((v) => (v === 'UTILITY')).length) / arrayOfRoles.length) * 100)
+        };
+        let adcarry = {
+            role: 'ADCarry',
+            porcentage: (((arrayOfRoles.filter((v) => (v === 'BOTTOM')).length) / arrayOfRoles.length) * 100)
+        };
+        let mid = {
+            role: 'Mid',
+            porcentage: (((arrayOfRoles.filter((v) => (v === 'MIDDLE')).length) / arrayOfRoles.length) * 100)
+        };
+        let jungler = {
+            role: 'Jungler',
+            porcentage: (((arrayOfRoles.filter((v) => (v === 'JUNGLER')).length) / arrayOfRoles.length) * 100)
+        };
+        let top = {
+            role: 'Top',
+            porcentage: (((arrayOfRoles.filter((v) => (v === 'TOP')).length) / arrayOfRoles.length) * 100)
+        };
+    
+        let mostUsedRoles = [support, adcarry, mid, jungler, top].sort((a, b) =>  b.porcentage - a.porcentage);
+
+        return [mostUsedRoles[0] ? mostUsedRoles[0] : {role: '', porcentage: '0'}, mostUsedRoles[1]];
+    };
+    
+    const usedRoles = mostRolesPlayed(arrayUserTeamPosition);
 
     return (
         <Container>
@@ -109,8 +137,24 @@ const LeagueMatches = ({ summonerPuuid }) => {
                                     <p>Vision Score: {userAverageVisionScore}</p>
                                 </PerformanceStats>
                                 <SelectedChampions>
-                                    {/* {arrayUserChampions} */}
+                                    <h3>Preferred champions</h3>
+                                    {
+                                        arrayUserChampions.map(champion => <p>{champion}</p>)
+                                    }
                                 </SelectedChampions>
+                                <SelectedRoles>
+                                    <h3>Preferred roles</h3>
+                                    {
+                                        usedRoles.map(role => {
+                                            return (
+                                                <RoleInfo key={role.role}>  
+                                                    <img src={require(`../../assets/Role_${role.role}.png`)} alt={role.role}/>
+                                                    <p key={role.role}>{role.porcentage ? `${role.porcentage}%` : ''}</p>
+                                                </RoleInfo>
+                                            );
+                                        })
+                                    }
+                                </SelectedRoles>
                             </>
 
                         ) : null

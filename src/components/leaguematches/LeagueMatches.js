@@ -70,7 +70,6 @@ const LeagueMatches = ({ summonerPuuid }) => {
             });
 
             arrayPlayers = [...arrayPlayers, gameParticipants];
-            console.log(arrayPlayers);
 
             arrayGamesData = [...arrayGamesData, {
                 gameDuration,
@@ -80,14 +79,13 @@ const LeagueMatches = ({ summonerPuuid }) => {
             }];
         });
 
-        console.log(arrayUserKills, arrayUserDeaths, arrayUserAssists, arrayUserMinionsKilled)
-
         userAverageMinionsKilled = arrayUserMinionsKilled.reduce((userAverageMinionsKilled, i) => userAverageMinionsKilled + i) / arrayUserMinionsKilled.length;
         userAverageVisionScore = arrayUserVisionScores.reduce((userAverageVisionScore, i) => userAverageVisionScore + i) / arrayUserVisionScores.length;
-        userAverageKills = arrayUserKills.reduce((userAverageKills, i) => userAverageKills + i) / arrayUserKills.length;
-        userAverageDeaths = arrayUserDeaths.reduce((userAverageDeaths, i) => userAverageDeaths + i) / arrayUserDeaths.length;
-        userAverageAssists = arrayUserAssists.reduce((userAverageAssists, i) => userAverageAssists + i) / arrayUserAssists.length;
-        userAverageKDA = (arrayUserKills + arrayUserAssists) / (userAverageDeaths ? userAverageDeaths : 1);
+        userAverageKills = (arrayUserKills.reduce((userAverageKills, i) => userAverageKills + i) / arrayUserKills.length);
+        userAverageDeaths = (arrayUserDeaths.reduce((userAverageDeaths, i) => userAverageDeaths + i) / arrayUserDeaths.length);
+        userAverageAssists = (arrayUserAssists.reduce((userAverageAssists, i) => userAverageAssists + i) / arrayUserAssists.length);
+        console.log(userAverageKills, userAverageDeaths, userAverageAssists);
+        userAverageKDA = ((userAverageKills + userAverageAssists) / (userAverageDeaths ? userAverageDeaths : 1)).toFixed(2);
     };
 
     return (
@@ -104,9 +102,11 @@ const LeagueMatches = ({ summonerPuuid }) => {
                                     </p>
                                 </WinRate>
                                 <PerformanceStats>
-                                    <p>Average CS: {userAverageMinionsKilled}</p>
-                                    <p>Average Vision Score: {userAverageVisionScore}</p>
-                                    <p>Average KDA: {arrayUserKills}</p>
+                                    <h3>Average: </h3>
+                                    <p>{userAverageKills} / {userAverageDeaths} / {userAverageAssists}</p>
+                                    <p>KDA: {userAverageKDA}</p>
+                                    <p>CS: {userAverageMinionsKilled}</p>
+                                    <p>Vision Score: {userAverageVisionScore}</p>
                                 </PerformanceStats>
                                 <SelectedChampions>
                                     {/* {arrayUserChampions} */}
@@ -165,7 +165,7 @@ const LeagueMatches = ({ summonerPuuid }) => {
                                 <SummonerItems>
                                     {
                                         userItems.map(item => {
-                                            if (item !== 0) return <img src={`http://ddragon.leagueoflegends.com/cdn/12.1.1/img/item/${item}.png`} alt={item} />
+                                            if (item !== 0) return <img src={`http://ddragon.leagueoflegends.com/cdn/12.1.1/img/item/${item}.png`} alt={item} key={item}/>
                                             return <div></div>
                                         })
                                     }

@@ -144,7 +144,7 @@ export const GamesStatsContainer = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 5px 0px;
+    padding: 5px 0px 10px 0px;
     margin-bottom: 5px;
     border-radius: 5px;
 
@@ -152,7 +152,7 @@ export const GamesStatsContainer = styled.div`
         align-self: center;
         font-size: 25px;
         font-weight: normal;
-        margin-bottom: 10px;
+        margin-bottom: 5px;
     }
 `;
 
@@ -178,11 +178,17 @@ export const WinRate = styled.div`
 `;
 
 export const PerformanceStats = styled.div`
+    ${'' /* border: 1px solid red; */}
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+
     p {
         color: white;
     }
 `;
 
 export const SelectedChampions = styled.div`
-
+    border: 1px solid red;
 `;

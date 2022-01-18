@@ -188,14 +188,23 @@ export const PerformanceStats = styled.div`
 `;
 
 export const SelectedChampions = styled.div`
-    border: 1px solid red;
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: space-between;
 
-    p {
-        font-size: 7px;
+    img {
+        height: 37px;
+        border: 1px solid #1e1e1e;
+        border-radius: 5px;
+        margin-right: 5px;
     }
+`;
+
+export const ChampionInfo = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
 `;
 
 export const SelectedRoles = styled.div`
@@ -213,4 +222,5 @@ export const SelectedRoles = styled.div`
 export const RoleInfo = styled.div`
     display: flex;
     align-items: center;
+    width: 90px;
 `;

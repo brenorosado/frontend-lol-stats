@@ -5,7 +5,7 @@ import { findSpellImageLink } from "../../helpers/LoLSummonerSpellsHandler";
 import { formatTime, calculateGameEndDate } from "../../helpers/DateHandler";
 import {
     Container, MatchContainer, TeamsContainer, Team, Player, GameInfo, SummonerInfo, UserChampionImage, SpellsImage,
-    SummonerPerformance, SummonerItems, GameResult, GamesStatsContainer, WinRate, GameStats, SelectedChampions, PerformanceStats, SelectedRoles, RoleInfo
+    SummonerPerformance, SummonerItems, GameResult, GamesStatsContainer, WinRate, GameStats, SelectedChampions, PerformanceStats, SelectedRoles, RoleInfo, ChampionInfo
 } from "./styles";
 
 const LeagueMatches = ({ summonerPuuid }) => {
@@ -108,13 +108,56 @@ const LeagueMatches = ({ summonerPuuid }) => {
             role: 'Top',
             porcentage: (((arrayOfRoles.filter((v) => (v === 'TOP')).length) / arrayOfRoles.length) * 100)
         };
-    
-        let mostUsedRoles = [support, adcarry, mid, jungler, top].sort((a, b) =>  b.porcentage - a.porcentage);
 
-        return [mostUsedRoles[0] ? mostUsedRoles[0] : {role: '', porcentage: '0'}, mostUsedRoles[1]];
+        let mostUsedRoles = [support, adcarry, mid, jungler, top].sort((a, b) => b.porcentage - a.porcentage);
+
+        return [mostUsedRoles[0] ? mostUsedRoles[0] : { role: '', porcentage: '0' }, mostUsedRoles[1]];
     };
-    
+
     const usedRoles = mostRolesPlayed(arrayUserTeamPosition);
+
+    console.log(`arrayUserChampions`, arrayUserChampions);
+
+    const findTheTwoMostUsedChampions = (arrayOfChampions) => {
+        let count = [], secondCount = [];
+
+        for (let i = 0; i < arrayOfChampions.length; i++) count = [...count, arrayOfChampions.filter(x => x == arrayOfChampions[i]).length];
+        let max = Math.max(...count);
+        const indexOfMax = count.indexOf(max);
+
+        console.log(arrayOfChampions, count);
+        let result = [{
+            championName: arrayOfChampions[indexOfMax],
+            usedPorcentage: `${(arrayOfChampions.filter(x => x == arrayOfChampions[indexOfMax]).length) * 10}%`
+        }];
+
+        const mostUsedChampion = arrayOfChampions.splice(indexOfMax, 1)[0];
+
+        for (let i = 0; i < arrayOfChampions.length; i++) {
+            if (arrayOfChampions[i] === mostUsedChampion) {
+                arrayOfChampions.splice(i, 1);
+                i--;
+            };
+        };
+
+        for (let i = 0; i < arrayOfChampions.length; i++) {
+            secondCount = [...secondCount, arrayOfChampions.filter(x => x == arrayOfChampions[i]).length];
+        };
+
+        console.log(arrayOfChampions, secondCount);
+
+        max = Math.max(...secondCount);
+        const indexOfSecondMax = secondCount.indexOf(max);
+
+        result = [...result, {
+            championName: arrayOfChampions[indexOfSecondMax],
+            usedPorcentage: `${(arrayOfChampions.filter(x => x == arrayOfChampions[indexOfSecondMax]).length) * 10}%`
+        }];
+
+        return result;
+    };
+
+    const twoMostUsedChampions = findTheTwoMostUsedChampions(arrayUserChampions);
 
     return (
         <Container>
@@ -139,7 +182,14 @@ const LeagueMatches = ({ summonerPuuid }) => {
                                 <SelectedChampions>
                                     <h3>Preferred champions</h3>
                                     {
-                                        arrayUserChampions.map(champion => <p>{champion}</p>)
+                                        twoMostUsedChampions.map(champion => {
+                                            return (
+                                                <ChampionInfo>
+                                                    <img src={`https://ddragon.leagueoflegends.com/cdn/12.1.1/img/champion/${champion.championName === 'FiddleSticks' ? 'Fiddlesticks' : champion.championName}.png`} alt={champion.championName} />
+                                                    <p>{champion.usedPorcentage}</p>
+                                                </ChampionInfo>
+                                            )
+                                        })
                                     }
                                 </SelectedChampions>
                                 <SelectedRoles>
@@ -147,9 +197,9 @@ const LeagueMatches = ({ summonerPuuid }) => {
                                     {
                                         usedRoles.map(role => {
                                             return (
-                                                <RoleInfo key={role.role}>  
-                                                    <img src={require(`../../assets/Role_${role.role}.png`)} alt={role.role}/>
-                                                    <p key={role.role}>{role.porcentage ? `${role.porcentage}%` : ''}</p>
+                                                <RoleInfo key={role.role}>
+                                                    <img src={require(`../../assets/Role_${role.role}.png`)} alt={role.role} />
+                                                    <p key={role.role}>{role.porcentage ? `${role.porcentage}%` : '0%'}</p>
                                                 </RoleInfo>
                                             );
                                         })
@@ -209,7 +259,7 @@ const LeagueMatches = ({ summonerPuuid }) => {
                                 <SummonerItems>
                                     {
                                         userItems.map(item => {
-                                            if (item !== 0) return <img src={`http://ddragon.leagueoflegends.com/cdn/12.1.1/img/item/${item}.png`} alt={item} key={item}/>
+                                            if (item !== 0) return <img src={`http://ddragon.leagueoflegends.com/cdn/12.1.1/img/item/${item}.png`} alt={item} key={item} />
                                             return <div></div>
                                         })
                                     }

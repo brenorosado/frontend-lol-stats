@@ -1,33 +1,28 @@
 import React, { useEffect, useState } from "react";
 import doGetRequest from "../../helpers/Api";
+import { useNavigate} from 'react-router-dom';
 import { findQueueType } from "../../helpers/LolQueueTypeHandler";
 import { findSpellImageLink } from "../../helpers/LoLSummonerSpellsHandler";
 import { formatTime, calculateGameEndDate } from "../../helpers/DateHandler";
+import { BiChevronDown } from 'react-icons/bi';
 import {
     Container, MatchContainer, TeamsContainer, Team, Player, GameInfo, SummonerInfo, UserChampionImage, SpellsImage,
-    SummonerPerformance, SummonerItems, GameResult, GamesStatsContainer, WinRate, GameStats, SelectedChampions, PerformanceStats, SelectedRoles, RoleInfo, ChampionInfo
+    SummonerPerformance, SummonerItems, GameResult, GamesStatsContainer, WinRate, GameStats, SelectedChampions, PerformanceStats, SelectedRoles, RoleInfo, ChampionInfo, GameInfoButton
 } from "./styles";
 
 const LeagueMatches = ({ summonerPuuid }) => {
     const [matchesData, setMatchesData] = useState(null);
+    const navigate = useNavigate();
     let userChampion = '', userChampionLevel, gameResult = false, userAssists, userDeaths, userKills, userMinionsKilled, userItems, userVisionScore, userChampionName, userSummonerSpells;
-    let cabeca;
+
     useEffect(async () => {
         await doGetRequest(`/lol/matches/${summonerPuuid}`)
             .then(({ data }) => setMatchesData(data));
 
     }, [summonerPuuid]);
 
-    let arrayGamesData = [];
-    let arrayGamesResults = [];
-    let arrayPlayers = [];
-    let arrayUserChampions = [];
-    let arrayUserKills = [], arrayUserDeaths = [], arrayUserAssists = [], userAverageKills, userAverageDeaths, userAverageAssists, userAverageKDA;
-    let arrayUserMinionsKilled = [];
-    let userAverageMinionsKilled;
-    let arrayUserVisionScores = [];
-    let userAverageVisionScore;
-    let arrayUserTeamPosition = [];
+    let arrayGamesData = [], arrayGamesResults = [], arrayPlayers = [], arrayUserChampions = [], arrayUserKills = [], arrayUserDeaths = [], arrayUserAssists = [], arrayUserMinionsKilled = [], arrayUserVisionScores = [], arrayUserTeamPosition = [];;
+    let userAverageKills, userAverageDeaths, userAverageAssists, userAverageKDA, userAverageMinionsKilled, userAverageVisionScore;
 
     if (matchesData) {
         matchesData.map(matchData => {
@@ -254,6 +249,7 @@ const LeagueMatches = ({ summonerPuuid }) => {
                                     <h1>{`${userKills} / ${userDeaths} / ${userAssists}`}</h1>
                                     <p>KDA: {((userKills + userAssists) / (userDeaths === 0 ? 1 : userDeaths)).toFixed(2)}</p>
                                     <p>CS: {userMinionsKilled}</p>
+                                    <p>Level: {userChampionLevel}</p>
                                     <p>Vision score: {userVisionScore}</p>
                                 </SummonerPerformance>
                                 <SummonerItems>
@@ -273,7 +269,7 @@ const LeagueMatches = ({ summonerPuuid }) => {
                                                 return (
                                                     <Player key={summonerName}>
                                                         <img src={`https://ddragon.leagueoflegends.com/cdn/12.1.1/img/champion/${championName === 'FiddleSticks' ? 'Fiddlesticks' : championName}.png`} alt={championName} />
-                                                        <p onClick={(e) => console.log('Faça ir para a pagina desse summoner!')}>{summonerName}</p>
+                                                        <p onClick={(e) => navigate(`/lol/${summonerName}`)}>{summonerName}</p>
                                                     </Player>
                                                 );
                                             })
@@ -287,13 +283,14 @@ const LeagueMatches = ({ summonerPuuid }) => {
                                                 return (
                                                     <Player key={summonerName}>
                                                         <img src={`https://ddragon.leagueoflegends.com/cdn/12.1.1/img/champion/${championName === 'FiddleSticks' ? 'Fiddlesticks' : championName}.png`} alt={championName} />
-                                                        <p onClick={(e) => console.log('Faça ir para a pagina desse summoner!')}>{summonerName}</p>
+                                                        <p onClick={(e) =>navigate(`/lol/${summonerName}`)}>{summonerName}</p>
                                                     </Player>
                                                 );
                                             })
                                         }
                                     </Team>
                                 </TeamsContainer>
+                                <GameInfoButton><BiChevronDown /></GameInfoButton>
                             </MatchContainer>
                         );
                     })

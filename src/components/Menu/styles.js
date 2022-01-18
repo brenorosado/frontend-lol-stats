@@ -47,7 +47,6 @@ export const Container = styled.div`
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-                background-color: #fff;
                 font: 16px comic-sans, sans-serif;
                 font-weight: bold;
                 padding: 10px 14px;

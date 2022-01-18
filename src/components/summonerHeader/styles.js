@@ -19,7 +19,7 @@ export const SummonerCard = styled.div`
 `;
 
 export const SummonerImg = styled.img`
-    height: 150px;
+    height: 110px;
     background-color: gray;
     border: 3px solid gray;
     border-radius: 5px;
@@ -35,6 +35,7 @@ export const SummonerInfo = styled.div`
     justify-content: space-between;
 
     h1 {
+        font-size: 25px;
         color: white;
         margin-left: 25px;
 
@@ -50,7 +51,7 @@ export const SummonerInfo = styled.div`
     button {
         margin-left: 25px;
         width: 100px;
-        height: 40px;
+        height: 30px;
         background-color: #648de5;
         color: white;
         border-radius: 4px;

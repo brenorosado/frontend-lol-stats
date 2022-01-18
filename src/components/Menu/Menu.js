@@ -1,6 +1,6 @@
 import React from "react";
 import { Container } from "./styles";
-import { BiChevronDown } from 'react-icons/bi'
+import { BiChevronDown } from 'react-icons/bi';
 import { useNavigate } from "react-router-dom";
 
 const Menu = ({ game, setGame, summonerNickname, setSummonerNickname }) => {

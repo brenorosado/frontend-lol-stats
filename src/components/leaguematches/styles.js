@@ -18,6 +18,20 @@ export const MatchContainer = styled.div`
     margin-bottom: 2px;
 `;
 
+export const GameInfoButton = styled.div`
+    height: 110px;
+    width: 35px;
+    border: 1px solid #1e1e1e;
+    border-radius: 5px;
+    background-color: #1a232b;
+    color: white;
+    font-size: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+`;
+
 export const TeamsContainer = styled.div`
     display: flex;
     justify-content: space-between;

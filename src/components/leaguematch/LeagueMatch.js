@@ -1,17 +1,21 @@
 import React, { useState } from "react";
-import { MatchContainer, GameInfoButton, TeamsContainer, Team, Player, GameInfo, GameResult, SummonerInfo,
-    UserChampionImage, SpellsImage, SummonerPerformance, SummonerItems, GameDataStatsContainer } from './styles';
+import {
+    MatchContainer, GameInfoButton, TeamsContainer, Team, Player, GameInfo, GameResult, SummonerInfo,
+    UserChampionImage, SpellsImage, SummonerPerformance, SummonerItems, GameDataStatsContainer, ChampionAndSpellsElement,
+    TableItemsLine 
+} from './styles';
 import { useNavigate } from 'react-router-dom';
 import { findQueueType } from "../../helpers/LolQueueTypeHandler";
 import { findSpellImageLink } from "../../helpers/LoLSummonerSpellsHandler";
 import { formatTime, calculateGameEndDate } from "../../helpers/DateHandler";
 import { BiChevronDown } from 'react-icons/bi';
 
-const LeagueMatch = ({gameDuration, gameEndTimestamp, queueId, gameResult, userChampion, userSummonerSpells, userKills, userDeaths, userAssists,
-    userMinionsKilled, userChampionLevel, userVisionScore, userItems, blueTeam, redTeam}) => {
+const LeagueMatch = ({ gameDuration, gameEndTimestamp, queueId, gameResult, userChampion, userSummonerSpells, userKills, userDeaths, userAssists,
+    userMinionsKilled, userChampionLevel, userVisionScore, userItems, blueTeam, redTeam }) => {
 
     const [showInfo, setShowInfo] = useState(false);
     const navigate = useNavigate();
+
     return (
         <>
             <MatchContainer key={gameEndTimestamp} gameResult={gameResult ? '#Acfba6' : '#Fba6a6'}>
@@ -80,7 +84,114 @@ const LeagueMatch = ({gameDuration, gameEndTimestamp, queueId, gameResult, userC
             {
                 showInfo ? (
                     <GameDataStatsContainer>
-                        <h1>Coca cola e agua</h1>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Blue Team</th>
+                                    <th>Level</th>
+                                    <th>KDA</th>
+                                    <th>Damage</th>
+                                    <th>CS</th>
+                                    <th>Vision Score</th>
+                                    <th>Gold</th>
+                                    <th>Items</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {
+                                    blueTeam.map(player => {
+                                        const { assists, champLevel, championName, deaths, goldEarned, items, kills, spells,
+                                            summonerName, totalDamageDealtToChampions, totalMinionsKilled, visionScore } = player;
+
+                                        return (
+                                            <tr key={player.summonerName}>
+                                                <td>
+                                                    <ChampionAndSpellsElement>
+                                                        <div className="tableChampionImage"><img src={`https://ddragon.leagueoflegends.com/cdn/12.1.1/img/champion/${championName === 'FiddleSticks' ? 'Fiddlesticks' : championName}.png`} alt={championName} /></div>
+                                                        <div className="tableSpellImage">
+                                                            <img src={`http://ddragon.leagueoflegends.com/cdn/12.1.1/img/spell/${findSpellImageLink(spells[0])}`} alt={findSpellImageLink(spells[0])} />
+                                                            <img src={`http://ddragon.leagueoflegends.com/cdn/12.1.1/img/spell/${findSpellImageLink(spells[1])}`} alt={findSpellImageLink(spells[1])} />
+                                                        </div>
+                                                    </ChampionAndSpellsElement>
+                                                </td>
+                                                <td>{summonerName}</td>
+                                                <td>{champLevel}</td>
+                                                <td>{kills} / {deaths} / {assists}</td>
+                                                <td>{totalDamageDealtToChampions}</td>
+                                                <td>{totalMinionsKilled}</td>
+                                                <td>{visionScore}</td>
+                                                <td>{goldEarned}</td>
+                                                <td>
+                                                    <TableItemsLine>
+                                                        {
+                                                            items.map(item => {
+                                                                if (item !== 0) return <img src={`http://ddragon.leagueoflegends.com/cdn/12.1.1/img/item/${item}.png`} alt={item} key={item} />
+                                                                return <div></div>
+                                                            })
+                                                        }
+                                                    </TableItemsLine>
+                                                </td>
+                                            </tr>
+                                        )
+                                    })
+                                }
+                            </tbody>
+                        </table>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Red Team</th>
+                                    <th>Level</th>
+                                    <th>KDA</th>
+                                    <th>Damage</th>
+                                    <th>CS</th>
+                                    <th>Vision Score</th>
+                                    <th>Gold</th>
+                                    <th>Items</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {
+                                    redTeam.map(player => {
+                                        const { assists, champLevel, championName, deaths, goldEarned, items, kills, spells,
+                                            summonerName, totalDamageDealtToChampions, totalMinionsKilled, visionScore } = player;
+
+                                        return (
+                                            <tr key={player.summonerName}>
+                                                <td>
+                                                    <ChampionAndSpellsElement>
+                                                        <div className="tableChampionImage"><img src={`https://ddragon.leagueoflegends.com/cdn/12.1.1/img/champion/${championName === 'FiddleSticks' ? 'Fiddlesticks' : championName}.png`} alt={championName} /></div>
+                                                        <div className="tableSpellImage">
+                                                            <img src={`http://ddragon.leagueoflegends.com/cdn/12.1.1/img/spell/${findSpellImageLink(spells[0])}`} alt={findSpellImageLink(spells[0])} />
+                                                            <img src={`http://ddragon.leagueoflegends.com/cdn/12.1.1/img/spell/${findSpellImageLink(spells[1])}`} alt={findSpellImageLink(spells[1])} />
+                                                        </div>
+                                                    </ChampionAndSpellsElement>
+                                                </td>
+                                                <td>{summonerName}</td>
+                                                <td>{champLevel}</td>
+                                                <td>{kills} / {deaths} / {assists}</td>
+                                                <td>{totalDamageDealtToChampions}</td>
+                                                <td>{totalMinionsKilled}</td>
+                                                <td>{visionScore}</td>
+                                                <td>{goldEarned}</td>
+                                                <td>
+                                                    <TableItemsLine>
+                                                        {
+                                                            items.map(item => {
+                                                                if (item !== 0) return <img src={`http://ddragon.leagueoflegends.com/cdn/12.1.1/img/item/${item}.png`} alt={item} key={item} />
+                                                                return <div></div>
+                                                            })
+                                                        }
+                                                    </TableItemsLine>
+                                                </td>
+                                            </tr>
+                                        )
+                                    })
+                                }
+                            </tbody>
+                        </table>
                     </GameDataStatsContainer>
                 ) : null
             }

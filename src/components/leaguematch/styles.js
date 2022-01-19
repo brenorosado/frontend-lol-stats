@@ -145,13 +145,81 @@ export const SummonerItems = styled.div`
 `;
 
 export const GameDataStatsContainer = styled.div`
-    height: 100%;
     width: 100%;
     background-color: #1a232b;
     border-radius: 5px;
-    padding: 5px;
+    padding: 0px 5px;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    flex-direction: column;
     color: white;
+
+    table {
+        width: 100%;
+        background-color: rgba(255, 255, 255, 0.05);
+        text-align: center;
+        border-radius: 5px;
+        padding: 10px 0px;
+        margin: 5px 0px;
+
+        td {
+            padding: 0px 8px;
+        }
+        
+    }
+`;
+
+export const ChampionAndSpellsElement = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 54px;
+    height: 39px;
+
+    .tableChampionImage {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        img {
+            height: 36px;
+            width: 36px;
+            border-radius: 50%;
+        }
+    }
+
+    .tableSpellImage {
+        display: flex;
+        flex-direction: column;
+        align-items: space-between;
+        justify-content: space-between;
+        height: 100%;
+
+        img {
+            height: 18px;
+            width: 18x;
+            border-radius: 5px;
+        }
+    }
+`;
+
+export const TableItemsLine = styled.div`
+    display: flex;
+    height: 30px;
+    width: 180px;
+    justify-content: space-between;
+    align-items: center;
+
+    img {
+        height: 25px;
+        width: 25px;
+        border-radius: 5px;
+    }
+
+    div {
+        height: 25px;
+        width: 25px;
+        background-color: #1e1e1e;
+        border-radius: 5px;
+        border: 1px solid gray;
+    }
 `;

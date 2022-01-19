@@ -8,6 +8,7 @@ export const Container = styled.div`
 `;
 
 export const GamesStatsContainer = styled.div`
+    height: 150px;
     width: 800px;
     background-color: #1a232b;
     color: white;

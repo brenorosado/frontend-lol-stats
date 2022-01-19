@@ -5,6 +5,7 @@ import doGetRequest from "../../helpers/Api";
 import SummonerHeader from "../../components/summonerHeader/SummonerHeader";
 import LeagueRanks from "../../components/leagueranks/LeagueRanks";
 import LeagueMatches from "../../components/leaguematches/LeagueMatches";
+import LoadingComponent from "../../components/loadingcomponent";
 import { ContentSection } from './styles';
 
 const LolScreen = ({ game, setGame, summonerNickname, setSummonerNickname }) => {
@@ -32,7 +33,7 @@ const LolScreen = ({ game, setGame, summonerNickname, setSummonerNickname }) => 
                             <LeagueMatches summonerPuuid={summonerInfo.puuid}/>
                         </ContentSection>
                     </>
-                ) : null
+                ) : <LoadingComponent/>
             }
         </>
     );

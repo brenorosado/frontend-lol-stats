@@ -8,7 +8,8 @@ import { useNavigate } from 'react-router-dom';
 import { findQueueType } from "../../helpers/LolQueueTypeHandler";
 import { findSpellImageLink } from "../../helpers/LoLSummonerSpellsHandler";
 import { formatTime, calculateGameEndDate } from "../../helpers/DateHandler";
-import { BiChevronDown } from 'react-icons/bi';
+import { BiChevronDown, BiChevronUp } from 'react-icons/bi';
+import { Spinner } from 'react-bootstrap';
 
 const LeagueMatch = ({ gameDuration, gameEndTimestamp, queueId, gameResult, userChampion, userSummonerSpells, userKills, userDeaths, userAssists,
     userMinionsKilled, userChampionLevel, userVisionScore, userItems, blueTeam, redTeam }) => {
@@ -76,10 +77,7 @@ const LeagueMatch = ({ gameDuration, gameEndTimestamp, queueId, gameResult, user
                         }
                     </Team>
                 </TeamsContainer>
-                <GameInfoButton onClick={(e) => {
-                    setShowInfo(!showInfo);
-                    console.log(showInfo);
-                }}><BiChevronDown /></GameInfoButton>
+                <GameInfoButton onClick={(e) => setShowInfo(!showInfo)}>{showInfo ? <BiChevronUp /> : <BiChevronDown />}</GameInfoButton>
             </MatchContainer>
             {
                 showInfo ? (
@@ -193,7 +191,7 @@ const LeagueMatch = ({ gameDuration, gameEndTimestamp, queueId, gameResult, user
                             </tbody>
                         </table>
                     </GameDataStatsContainer>
-                ) : null
+                ) : <Spinner animation="border" variant="light" />
             }
         </>
     );

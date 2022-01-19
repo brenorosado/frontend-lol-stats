@@ -11,7 +11,7 @@ export const Container = styled.div`
 `;
 
 export const SummonerCard = styled.div`
-    width: 60.65%;
+    width: 100%;
     background-color: #1a232b;
     border-radius: 5px;
     padding: 20px;

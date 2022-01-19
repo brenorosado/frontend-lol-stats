@@ -4,6 +4,7 @@ import {
     Container, GamesStatsContainer, WinRate, GameStats, SelectedChampions,
     PerformanceStats, SelectedRoles, RoleInfo, ChampionInfo } from "./styles";
 import LeagueMatch from "../leaguematch";
+import LoadingComponent from "../loadingcomponent/LoadingComponent";
 
 const LeagueMatches = ({ summonerPuuid }) => {
     const [matchesData, setMatchesData] = useState(null);
@@ -191,7 +192,7 @@ const LeagueMatches = ({ summonerPuuid }) => {
                                 </SelectedRoles>
                             </>
 
-                        ) : null
+                        ) : <LoadingComponent />
                     }
                 </GameStats>
             </GamesStatsContainer>
@@ -226,7 +227,7 @@ const LeagueMatches = ({ summonerPuuid }) => {
                             />
                         );
                     })
-                ) : null
+                ) : <LoadingComponent/>
             }
         </Container>
     );

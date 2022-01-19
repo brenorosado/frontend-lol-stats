@@ -1,18 +1,13 @@
 import React, { useEffect, useState } from "react";
 import doGetRequest from "../../helpers/Api";
-import { useNavigate} from 'react-router-dom';
-import { findQueueType } from "../../helpers/LolQueueTypeHandler";
-import { findSpellImageLink } from "../../helpers/LoLSummonerSpellsHandler";
-import { formatTime, calculateGameEndDate } from "../../helpers/DateHandler";
-import { BiChevronDown } from 'react-icons/bi';
 import {
-    Container, MatchContainer, TeamsContainer, Team, Player, GameInfo, SummonerInfo, UserChampionImage, SpellsImage,
-    SummonerPerformance, SummonerItems, GameResult, GamesStatsContainer, WinRate, GameStats, SelectedChampions, PerformanceStats, SelectedRoles, RoleInfo, ChampionInfo, GameInfoButton
-} from "./styles";
+    Container, GamesStatsContainer, WinRate, GameStats, SelectedChampions,
+    PerformanceStats, SelectedRoles, RoleInfo, ChampionInfo } from "./styles";
+import LeagueMatch from "../leaguematch";
 
 const LeagueMatches = ({ summonerPuuid }) => {
     const [matchesData, setMatchesData] = useState(null);
-    const navigate = useNavigate();
+    
     let userChampion = '', userChampionLevel, gameResult = false, userAssists, userDeaths, userKills, userMinionsKilled, userItems, userVisionScore, userChampionName, userSummonerSpells;
 
     useEffect(async () => {
@@ -111,8 +106,6 @@ const LeagueMatches = ({ summonerPuuid }) => {
 
     const usedRoles = mostRolesPlayed(arrayUserTeamPosition);
 
-    console.log(`arrayUserChampions`, arrayUserChampions);
-
     const findTheTwoMostUsedChampions = (arrayOfChampions) => {
         let count = [], secondCount = [];
 
@@ -120,10 +113,9 @@ const LeagueMatches = ({ summonerPuuid }) => {
         let max = Math.max(...count);
         const indexOfMax = count.indexOf(max);
 
-        console.log(arrayOfChampions, count);
         let result = [{
             championName: arrayOfChampions[indexOfMax],
-            usedPorcentage: `${(arrayOfChampions.filter(x => x == arrayOfChampions[indexOfMax]).length) * 10}%`
+            usedPorcentage: `${(arrayOfChampions.filter(x => x === arrayOfChampions[indexOfMax]).length) * 10}%`
         }];
 
         const mostUsedChampion = arrayOfChampions.splice(indexOfMax, 1)[0];
@@ -136,17 +128,15 @@ const LeagueMatches = ({ summonerPuuid }) => {
         };
 
         for (let i = 0; i < arrayOfChampions.length; i++) {
-            secondCount = [...secondCount, arrayOfChampions.filter(x => x == arrayOfChampions[i]).length];
+            secondCount = [...secondCount, arrayOfChampions.filter(x => x === arrayOfChampions[i]).length];
         };
-
-        console.log(arrayOfChampions, secondCount);
 
         max = Math.max(...secondCount);
         const indexOfSecondMax = secondCount.indexOf(max);
 
         result = [...result, {
             championName: arrayOfChampions[indexOfSecondMax],
-            usedPorcentage: `${(arrayOfChampions.filter(x => x == arrayOfChampions[indexOfSecondMax]).length) * 10}%`
+            usedPorcentage: `${(arrayOfChampions.filter(x => x === arrayOfChampions[indexOfSecondMax]).length) * 10}%`
         }];
 
         return result;
@@ -157,7 +147,6 @@ const LeagueMatches = ({ summonerPuuid }) => {
     return (
         <Container>
             <GamesStatsContainer>
-                <h1>LAST 10 GAMES STATS</h1>
                 <GameStats>
                     {
                         matchesData ? (
@@ -209,7 +198,6 @@ const LeagueMatches = ({ summonerPuuid }) => {
             {
                 matchesData ? (
                     arrayGamesData.map(matchData => {
-
                         const { gameDuration, gameEndTimestamp, queueId } = matchData;
 
                         matchData.gameParticipants.map(participant => {
@@ -232,66 +220,10 @@ const LeagueMatches = ({ summonerPuuid }) => {
                         let redTeam = matchData.gameParticipants.slice(-5);
 
                         return (
-                            <MatchContainer key={gameEndTimestamp} gameResult={gameResult ? '#Acfba6' : '#Fba6a6'}>
-                                <GameInfo>
-                                    <p>{findQueueType(queueId)}</p>
-                                    <p>{calculateGameEndDate(gameEndTimestamp)}</p>
-                                    <GameResult gameResult={gameResult ? 'green' : 'red'}>{gameResult ? 'Victory' : 'Defeat'}</GameResult>
-                                    <p>{formatTime(gameDuration)}</p>
-                                </GameInfo>
-                                <SummonerInfo>
-                                    <UserChampionImage><img src={`https://ddragon.leagueoflegends.com/cdn/12.1.1/img/champion/${userChampion === 'FiddleSticks' ? 'Fiddlesticks' : userChampion}.png`} alt={userChampion} /></UserChampionImage>
-                                    <SpellsImage><img src={`http://ddragon.leagueoflegends.com/cdn/12.1.1/img/spell/${findSpellImageLink(userSummonerSpells[0])}`} alt={findSpellImageLink(userSummonerSpells[0])} /></SpellsImage>
-                                    <SpellsImage><img src={`http://ddragon.leagueoflegends.com/cdn/12.1.1/img/spell/${findSpellImageLink(userSummonerSpells[1])}`} alt={findSpellImageLink(userSummonerSpells[1])} /></SpellsImage>
-                                    <p>{userChampion}</p>
-                                </SummonerInfo>
-                                <SummonerPerformance>
-                                    <h1>{`${userKills} / ${userDeaths} / ${userAssists}`}</h1>
-                                    <p>KDA: {((userKills + userAssists) / (userDeaths === 0 ? 1 : userDeaths)).toFixed(2)}</p>
-                                    <p>CS: {userMinionsKilled}</p>
-                                    <p>Level: {userChampionLevel}</p>
-                                    <p>Vision score: {userVisionScore}</p>
-                                </SummonerPerformance>
-                                <SummonerItems>
-                                    {
-                                        userItems.map(item => {
-                                            if (item !== 0) return <img src={`http://ddragon.leagueoflegends.com/cdn/12.1.1/img/item/${item}.png`} alt={item} key={item} />
-                                            return <div></div>
-                                        })
-                                    }
-                                </SummonerItems>
-                                <TeamsContainer>
-                                    <Team>
-                                        {
-                                            blueTeam.map(participant => {
-                                                const { championName, summonerName } = participant;
-
-                                                return (
-                                                    <Player key={summonerName}>
-                                                        <img src={`https://ddragon.leagueoflegends.com/cdn/12.1.1/img/champion/${championName === 'FiddleSticks' ? 'Fiddlesticks' : championName}.png`} alt={championName} />
-                                                        <p onClick={(e) => navigate(`/lol/${summonerName}`)}>{summonerName}</p>
-                                                    </Player>
-                                                );
-                                            })
-                                        }
-                                    </Team>
-                                    <Team>
-                                        {
-                                            redTeam.map(participant => {
-                                                const { championName, summonerName } = participant;
-
-                                                return (
-                                                    <Player key={summonerName}>
-                                                        <img src={`https://ddragon.leagueoflegends.com/cdn/12.1.1/img/champion/${championName === 'FiddleSticks' ? 'Fiddlesticks' : championName}.png`} alt={championName} />
-                                                        <p onClick={(e) =>navigate(`/lol/${summonerName}`)}>{summonerName}</p>
-                                                    </Player>
-                                                );
-                                            })
-                                        }
-                                    </Team>
-                                </TeamsContainer>
-                                <GameInfoButton><BiChevronDown /></GameInfoButton>
-                            </MatchContainer>
+                            <LeagueMatch gameDuration={gameDuration} gameEndTimestamp={gameEndTimestamp} queueId={queueId} gameResult={gameResult} userChampion={userChampion} userSummonerSpells={userSummonerSpells}
+                                userKills={userKills} userDeaths={userDeaths} userAssists={userAssists} userMinionsKilled={userMinionsKilled} userChampionLevel={userChampionLevel} userVisionScore={userVisionScore}
+                                userItems={userItems} blueTeam={blueTeam} redTeam={redTeam}
+                            />
                         );
                     })
                 ) : null

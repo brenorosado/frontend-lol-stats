@@ -1,4 +1,4 @@
-# lol-stats (freont)
+# lol-stats (frontend)
 Este projeto mostra informações sobre jogadores de League of Legends
 
 <img src='https://user-images.githubusercontent.com/83065685/150190040-499860b9-e8c0-420e-84e3-7bf4f32b0ebf.png' alt='homescreen' style="height: 300px;"/>
@@ -10,6 +10,6 @@ Este projeto mostra informações sobre jogadores de League of Legends
 - Axios
 - Styled-components
 
-# Repositories
+# Repositórios
 - Backend: https://github.com/brenorosado/backend-lol-stats
 - Frontend: https://github.com/brenorosado/frontend-lol-stats
